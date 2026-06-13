@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: nova
+    env: node
+    buildCommand: cd server && npm install --production
+    startCommand: cd server && node server.js
+    envVars:
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: BASE_URL
+        value: https://nova.onrender.com
+      - key: PORT
+        value: 3001
+    healthCheckPath: /nova/index.html

@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova 鈥?Knowledge Studio</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ====== App Shell ====== -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">鈼?/span>
+      <span class="logo-text">Nova</span>
+      <button id="newNoteBtn" class="icon-btn" title="New note">+</button>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="notes">
+        <span class="nav-icon">馃搫</span> All Notes
+      </button>
+      <button class="nav-item" data-view="tags">
+        <span class="nav-icon">馃彿</span> Tags
+      </button>
+      <button class="nav-item" data-view="graph">
+        <span class="nav-icon">馃敆</span> Graph
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="tag-list" id="sidebarTagList"></div>
+      <div class="sidebar-controls">
+        <button id="themeToggle" class="icon-btn" title="Toggle theme">馃寵</button>
+        <button id="exportBtn" class="icon-btn" title="Export all">鈫?/button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MIDDLE PANE -->
+  <main id="middlePane">
+    <div class="pane-header">
+      <input type="text" id="searchInput" placeholder="Search notes..." autocomplete="off">
+      <div class="view-controls">
+        <span id="noteCount" class="count-badge">0 notes</span>
+      </div>
+    </div>
+    <div id="notesList" class="notes-list">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">鈼?/div>
+        <h3>Welcome to Nova</h3>
+        <p>Your ideas, connected. Create your first note to get started.</p>
+        <button id="emptyNewNoteBtn" class="primary-btn">Create your first note</button>
+      </div>
+    </div>
+    <div id="tagsView" class="view-panel hidden"></div>
+    <div id="graphView" class="view-panel hidden">
+      <canvas id="graphCanvas"></canvas>
+      <div class="graph-info">
+        <span id="graphNodeCount">0 nodes</span>
+        <span id="graphEdgeCount">0 connections</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- EDITOR PANE -->
+  <aside id="editorPane" class="editor-pane">
+    <div class="editor-header">
+      <input type="text" id="noteTitle" placeholder="Note title..." class="title-input" autocomplete="off">
+      <div class="editor-actions">
+        <button id="editorModeBtn" class="icon-btn" title="Toggle preview">馃憗</button>
+        <button id="deleteNoteBtn" class="icon-btn danger" title="Delete note">馃棏</button>
+      </div>
+    </div>
+    <div class="editor-body">
+      <div id="editorMode" class="editor-mode">
+        <textarea id="noteContent" placeholder="Start writing... Use [[links]] to connect notes and #tags to organize." spellcheck="true"></textarea>
+        <div id="notePreview" class="preview-pane markdown-body"></div>
+      </div>
+      <div class="editor-footer-bar">
+        <span id="wordCount">0 words</span>
+        <span id="charCount">0 chars</span>
+        <span id="readingTime">0 min read</span>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<div id="toastContainer"></div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="js/db.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/graph.js"></script>
+<script src="js/search.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var key = localStorage.getItem("nova-active-license");
+  var db = JSON.parse(localStorage.getItem("nova-licenses") || "{}");
+  var el = document.getElementById("appLicenseStatus");
+  if (key && db[key]) {
+    el.innerHTML = "✓ Licensed · " + db[key].plan + " · <a href=\"landing/download.html\" style=\"color:var(--accent);font-size:11px\">Downloads</a>";
+    el.style.color = "var(--success)";
+  } else {
+    el.innerHTML = "<a href=\"landing/index.html#pricing\" style=\"color:var(--accent);font-size:11px\">◆ Unlock Full Version</a>";
+  }
+});
+</script>
+</body>
+</html>
+
+

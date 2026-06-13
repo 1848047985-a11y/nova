@@ -1,0 +1,1260 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova — AI Knowledge Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #07070c;
+    color: #e4e4ed;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 16px 0;
+    background: rgba(7,7,12,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    z-index: 100;
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { font-size: 20px; font-weight: 700; color: #c8a45c; letter-spacing: -0.03em; }
+  .nav-logo span { color: #e4e4ed; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: #9393b0; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: #e4e4ed; }
+  .nav-cta {
+    padding: 8px 20px; background: #c8a45c; color: #07070c;
+    border-radius: 6px; font-weight: 600; font-size: 14px;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .nav-cta:hover { background: #dbb96a; transform: translateY(-1px); }
+
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute;
+    top: -40%; left: -20%; width: 80%; height: 100%;
+    background: radial-gradient(ellipse at center, rgba(200,164,92,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; padding: 120px 0 80px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border: 1px solid rgba(200,164,92,0.25);
+    border-radius: 100px; font-size: 13px; font-weight: 500;
+    color: #c8a45c; background: rgba(200,164,92,0.06);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 72px; font-weight: 800; letter-spacing: -0.04em;
+    line-height: 1.05; margin-bottom: 20px;
+  }
+  .hero h1 .accent { color: #c8a45c; }
+  .hero p {
+    font-size: 18px; color: #9393b0;
+    max-width: 560px; margin-bottom: 40px; line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-actions .btn-primary {
+    padding: 14px 32px; background: #c8a45c; color: #07070c;
+    border-radius: 8px; font-weight: 600; font-size: 15px;
+    text-decoration: none; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .hero-actions .btn-primary:hover { background: #dbb96a; transform: translateY(-2px); }
+  .hero-actions .btn-secondary {
+    padding: 14px 32px; border: 1px solid #2a2a3e; color: #e4e4ed;
+    border-radius: 8px; font-weight: 500; font-size: 15px;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .hero-actions .btn-secondary:hover { border-color: #c8a45c; background: rgba(200,164,92,0.06); }
+  .hero-showcase { margin-top: 80px; position: relative; }
+
+  section { padding: 100px 0; }
+  .section-label {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.12em; color: #c8a45c; margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 40px; font-weight: 700; letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px; color: #9393b0; max-width: 600px; line-height: 1.7;
+  }
+
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 60px;
+  }
+  .feature-card {
+    padding: 32px; background: #101018;
+    border: 1px solid #1e1e2e; border-radius: 12px;
+    transition: all 0.3s;
+  }
+  .feature-card:hover {
+    border-color: #c8a45c; background: #151520; transform: translateY(-4px);
+  }
+  .feature-icon {
+    width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+    background: rgba(200,164,92,0.1); border-radius: 10px;
+    font-size: 20px; margin-bottom: 20px;
+  }
+  .feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+  .feature-card p { font-size: 14px; color: #9393b0; line-height: 1.7; }
+
+  .ai-section {
+    background: linear-gradient(180deg, #07070c 0%, #0c0c18 50%, #07070c 100%);
+    border-top: 1px solid #1e1e2e; border-bottom: 1px solid #1e1e2e;
+  }
+  .ai-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 48px; }
+  .ai-card {
+    padding: 28px; background: rgba(16,16,24,0.6);
+    border: 1px solid #1e1e2e; border-radius: 10px;
+  }
+  .ai-card h4 { font-size: 15px; font-weight: 600; color: #c8a45c; margin-bottom: 8px; }
+  .ai-card p { font-size: 13px; color: #9393b0; line-height: 1.7; }
+
+    /* Testimonials */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+  .testimonial-card {
+    padding: 28px;
+    background: #101018;
+    border: 1px solid #1e1e2e;
+    border-radius: 12px;
+  }
+  .testimonial-stars {
+    color: #c8a45c;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+  }
+  .testimonial-text {
+    font-size: 14px;
+    color: #9393b0;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .testimonial-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(200,164,92,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #c8a45c;
+    font-weight: 600;
+  }
+  .testimonial-name { font-size: 13px; font-weight: 600; color: #e4e4ed; }
+  .testimonial-role { font-size: 11px; color: #63637d; }
+
+  /* Comparison */
+  .comparison-table-wrap {
+    overflow-x: auto;
+    margin-top: 48px;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .comparison-table th {
+    padding: 14px 18px;
+    text-align: left;
+    background: #0c0c18;
+    border-bottom: 2px solid #1e1e2e;
+    font-weight: 600;
+    color: #e4e4ed;
+    white-space: nowrap;
+  }
+  .comparison-table th:first-child { border-radius: 8px 0 0 0; }
+  .comparison-table th:last-child { border-radius: 0 8px 0 0; }
+  .comparison-table th.nova-col { color: #c8a45c; }
+  .comparison-table td {
+    padding: 12px 18px;
+    border-bottom: 1px solid #1e1e2e;
+    color: #9393b0;
+  }
+  .comparison-table td:first-child { font-weight: 500; color: #e4e4ed; }
+  .comparison-table .check { color: #5bbf7a; }
+  .comparison-table .cross { color: #63637d; }
+  .comparison-table .partial { color: #c8a45c; }
+
+  .guarantee-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    margin-top: 40px;
+    background: rgba(200,164,92,0.04);
+    border: 1px solid rgba(200,164,92,0.12);
+    border-radius: 10px;
+    font-size: 14px;
+    color: #9393b0;
+    text-align: center;
+  }
+  .guarantee-badge strong { color: #c8a45c; }
+
+  /* Waitlist */
+  .waitlist-section {
+    text-align: center;
+    padding: 80px 0;
+    background: linear-gradient(180deg, #07070c 0%, #0c0c18 50%, #07070c 100%);
+    border-top: 1px solid #1e1e2e;
+  }
+  .waitlist-box {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #101018;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+  }
+  .waitlist-box h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .waitlist-box p { color: #9393b0; font-size: 14px; margin-bottom: 20px; }
+  .waitlist-form {
+    display: flex;
+    gap: 8px;
+  }
+  .waitlist-form input {
+    flex: 1;
+    padding: 12px 16px;
+    background: #0c0c18;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    color: #e4e4ed;
+    font-size: 14px;
+    outline: none;
+  }
+  .waitlist-form input:focus { border-color: #c8a45c; }
+  .waitlist-form button {
+    padding: 12px 24px;
+    background: #c8a45c;
+    color: #07070c;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .waitlist-form button:hover { background: #dbb96a; }
+  .waitlist-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .waitlist-social {
+    margin-top: 16px;
+    color: #63637d;
+    font-size: 13px;
+  }
+  .waitlist-success { color: #5bbf7a; font-size: 14px; margin-bottom: 12px; display: none; }
+  .waitlist-error { color: #e55b5b; font-size: 13px; margin-bottom: 12px; display: none; }
+
+  /* Social Share */
+  .share-bar {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .share-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid #2a2a3e;
+    background: #101018;
+    color: #9393b0;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .share-btn:hover { border-color: #c8a45c; color: #c8a45c; background: #151520; }
+
+  @media (max-width: 768px) {
+    .share-bar { display: none; }
+    .waitlist-form { flex-direction: column; }
+  }
+  @media (max-width: 900px) {
+    .testimonials-grid { grid-template-columns: 1fr; }
+  }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 60px;
+  }
+  .pricing-card {
+    padding: 40px 32px; background: #101018;
+    border: 1px solid #1e1e2e; border-radius: 14px;
+    text-align: center; transition: all 0.3s; position: relative;
+  }
+  .pricing-card.featured {
+    border-color: #c8a45c; background: #151520; transform: scale(1.03);
+  }
+  .pricing-card.featured .pricing-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    padding: 4px 16px; background: #c8a45c; color: #07070c;
+    border-radius: 100px; font-size: 12px; font-weight: 600;
+  }
+  .pricing-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  .pricing-card .pricing-sub { font-size: 14px; color: #63637d; margin-bottom: 24px; }
+  .pricing-card .price { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .pricing-card .price .currency { font-size: 24px; vertical-align: super; }
+  .pricing-card .price-period { font-size: 14px; color: #63637d; margin-bottom: 24px; }
+  .pricing-features { list-style: none; margin: 24px 0; text-align: left; }
+  .pricing-features li {
+    padding: 8px 0; font-size: 14px; color: #9393b0;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pricing-features li::before { content: '✓'; color: #5bbf7a; font-weight: 600; }
+  .pricing-btn {
+    display: block; width: 100%; padding: 12px;
+    border: 1px solid #2a2a3e; border-radius: 8px;
+    color: #e4e4ed; font-size: 15px; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s; background: transparent;
+  }
+  .pricing-btn:hover { border-color: #c8a45c; background: rgba(200,164,92,0.06); }
+  .pricing-btn.primary {
+    background: #c8a45c; color: #07070c; border-color: #c8a45c;
+  }
+  .pricing-btn.primary:hover { background: #dbb96a; }
+
+  .faq-list { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .faq-item { padding: 20px 0; border-bottom: 1px solid #1e1e2e; }
+  .faq-item h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .faq-item p { font-size: 14px; color: #9393b0; line-height: 1.7; }
+
+  footer {
+    border-top: 1px solid #1e1e2e; padding: 40px 0;
+    text-align: center; color: #63637d; font-size: 13px;
+  }
+
+  /* Checkout Modal */
+  .checkout-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+    padding: 20px;
+  }
+  .checkout-overlay.hidden { display: none; }
+  .checkout-modal {
+    background: #101018; border: 1px solid #2a2a3e;
+    border-radius: 16px; max-width: 480px; width: 100%;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+    overflow: hidden;
+  }
+  .checkout-header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid #1e1e2e;
+    display: flex; align-items: flex-start; justify-content: space-between;
+  }
+  .checkout-header h2 { font-size: 18px; font-weight: 600; }
+  .checkout-header .plan-tag {
+    font-size: 12px; color: #c8a45c; font-weight: 500;
+    margin-top: 4px;
+  }
+  .checkout-close {
+    width: 32px; height: 32px; border-radius: 6px;
+    border: 1px solid #2a2a3e; background: transparent;
+    color: #63637d; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .checkout-close:hover { background: #1e1e2e; color: #e4e4ed; }
+
+  .checkout-body { padding: 24px 28px; }
+  .checkout-summary {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px; background: #0c0c18;
+    border-radius: 8px; margin-bottom: 20px;
+  }
+  .checkout-summary .plan-name { font-size: 14px; font-weight: 600; }
+  .checkout-summary .plan-price { font-size: 20px; font-weight: 700; color: #c8a45c; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 13px; font-weight: 500;
+    color: #9393b0; margin-bottom: 6px;
+  }
+  .form-group input {
+    width: 100%; padding: 10px 14px;
+    background: #0c0c18; border: 1px solid #2a2a3e;
+    border-radius: 8px; color: #e4e4ed;
+    font-size: 14px; outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: #c8a45c; }
+  .form-group input::placeholder { color: #4a4a60; }
+
+  .checkout-btn {
+    width: 100%; padding: 14px; margin-top: 8px;
+    background: #c8a45c; color: #07070c;
+    border: none; border-radius: 8px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .checkout-btn:hover:not(:disabled) { background: #dbb96a; }
+  .checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .checkout-error {
+    padding: 10px 14px; background: rgba(229,91,91,0.1);
+    border: 1px solid rgba(229,91,91,0.3);
+    border-radius: 6px; color: #e55b5b;
+    font-size: 13px; margin-bottom: 12px;
+  }
+  .checkout-error.hidden { display: none; }
+  .checkout-secure {
+    text-align: center; margin-top: 12px;
+    font-size: 12px; color: #4a4a60;
+  }
+  .checkout-secure span { font-size: 14px; }
+
+  .checkout-success {
+    text-align: center; padding: 20px 0;
+  }
+  .checkout-success.hidden { display: none; }
+  .success-check {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(91,191,122,0.15);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+  }
+  .checkout-success h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .checkout-success p { font-size: 14px; color: #9393b0; margin-bottom: 16px; }
+  .license-display {
+    background: #0c0c18; border: 1px dashed #c8a45c;
+    border-radius: 8px; padding: 12px 16px;
+    font-family: 'Courier New', monospace; font-size: 13px;
+    color: #c8a45c; margin: 12px 0;
+    word-break: break-all;
+  }
+  .success-email-notice {
+    font-size: 12px; color: #63637d; margin-top: 8px;
+  }
+
+    /* App Mockup */
+  .mockup {
+    display: grid;
+    grid-template-columns: 180px 1fr 320px;
+    height: 440px;
+    background: #0a0a0f;
+    border: 1px solid #1e1e2e;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+  }
+  .mockup-sidebar {
+    background: #12121a;
+    border-right: 1px solid #1e1e2e;
+    display: flex;
+    flex-direction: column;
+  }
+  .mockup-sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid #1e1e2e;
+  }
+  .mockup-nav-item {
+    padding: 8px 14px;
+    font-size: 12px;
+    color: #63637d;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mockup-nav-item.active {
+    color: #c8a45c;
+    background: rgba(200,164,92,0.06);
+    border-right: 2px solid #c8a45c;
+  }
+  .mockup-sidebar-tags {
+    padding: 10px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .mockup-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: rgba(200,164,92,0.08);
+    color: #c8a45c;
+    border-radius: 3px;
+  }
+  .mockup-middle {
+    display: flex;
+    flex-direction: column;
+    background: #0a0a0f;
+    overflow: hidden;
+  }
+  .mockup-searchbar {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: #12121a;
+    border-bottom: 1px solid #1e1e2e;
+  }
+  .mockup-note-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+  .mockup-note-item {
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    background: #12121a;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: default;
+  }
+  .mockup-note-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e4e4ed;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mockup-note-preview {
+    font-size: 11px;
+    color: #63637d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+  }
+  .mockup-note-tags {
+    display: flex;
+    gap: 4px;
+  }
+  .mockup-note-tags span {
+    font-size: 9px;
+    padding: 1px 4px;
+    background: rgba(200,164,92,0.08);
+    color: #c8a45c;
+    border-radius: 2px;
+  }
+  .mockup-editor {
+    display: flex;
+    flex-direction: column;
+    background: #12121a;
+    border-left: 1px solid #1e1e2e;
+  }
+  .mockup-editor-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: #1a1a26;
+    border-bottom: 1px solid #1e1e2e;
+  }
+  .mockup-editor-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .mockup-editor-content {
+    flex: 1;
+    padding: 20px;
+    background: #0a0a0f;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow: hidden;
+  }
+  .mockup-editor-footer {
+    display: flex;
+    gap: 12px;
+    padding: 5px 14px;
+    background: #1a1a26;
+    border-top: 1px solid #1e1e2e;
+    font-size: 10px;
+    color: #63637d;
+  }
+
+  /* Waitlist */
+  .waitlist-section {
+    text-align: center;
+    padding: 80px 0;
+    background: linear-gradient(180deg, #07070c 0%, #0c0c18 50%, #07070c 100%);
+    border-top: 1px solid #1e1e2e;
+  }
+  .waitlist-box {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #101018;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+  }
+  .waitlist-box h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .waitlist-box p { color: #9393b0; font-size: 14px; margin-bottom: 20px; }
+  .waitlist-form {
+    display: flex;
+    gap: 8px;
+  }
+  .waitlist-form input {
+    flex: 1;
+    padding: 12px 16px;
+    background: #0c0c18;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    color: #e4e4ed;
+    font-size: 14px;
+    outline: none;
+  }
+  .waitlist-form input:focus { border-color: #c8a45c; }
+  .waitlist-form button {
+    padding: 12px 24px;
+    background: #c8a45c;
+    color: #07070c;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .waitlist-form button:hover { background: #dbb96a; }
+  .waitlist-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .waitlist-social {
+    margin-top: 16px;
+    color: #63637d;
+    font-size: 13px;
+  }
+  .waitlist-success { color: #5bbf7a; font-size: 14px; margin-bottom: 12px; display: none; }
+  .waitlist-error { color: #e55b5b; font-size: 13px; margin-bottom: 12px; display: none; }
+
+  /* Social Share */
+  .share-bar {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .share-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid #2a2a3e;
+    background: #101018;
+    color: #9393b0;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .share-btn:hover { border-color: #c8a45c; color: #c8a45c; background: #151520; }
+
+  @media (max-width: 768px) {
+    .share-bar { display: none; }
+    .waitlist-form { flex-direction: column; }
+  }
+  @media (max-width: 900px) {
+    .mockup { grid-template-columns: 1fr 2fr; }
+    .mockup-editor { display: none; }
+  }
+  @media (max-width: 600px) {
+    .mockup { grid-template-columns: 1fr; }
+    .mockup-sidebar { display: none; }
+  }
+  .license-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 6px 14px; background: rgba(91,191,122,0.08);
+    border: 1px solid rgba(91,191,122,0.2);
+    border-radius: 6px; font-size: 13px;
+  }
+  .license-bar span:first-child { color: #5bbf7a; }
+
+  /* Waitlist */
+  .waitlist-section {
+    text-align: center;
+    padding: 80px 0;
+    background: linear-gradient(180deg, #07070c 0%, #0c0c18 50%, #07070c 100%);
+    border-top: 1px solid #1e1e2e;
+  }
+  .waitlist-box {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #101018;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+  }
+  .waitlist-box h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .waitlist-box p { color: #9393b0; font-size: 14px; margin-bottom: 20px; }
+  .waitlist-form {
+    display: flex;
+    gap: 8px;
+  }
+  .waitlist-form input {
+    flex: 1;
+    padding: 12px 16px;
+    background: #0c0c18;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    color: #e4e4ed;
+    font-size: 14px;
+    outline: none;
+  }
+  .waitlist-form input:focus { border-color: #c8a45c; }
+  .waitlist-form button {
+    padding: 12px 24px;
+    background: #c8a45c;
+    color: #07070c;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .waitlist-form button:hover { background: #dbb96a; }
+  .waitlist-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .waitlist-social {
+    margin-top: 16px;
+    color: #63637d;
+    font-size: 13px;
+  }
+  .waitlist-success { color: #5bbf7a; font-size: 14px; margin-bottom: 12px; display: none; }
+  .waitlist-error { color: #e55b5b; font-size: 13px; margin-bottom: 12px; display: none; }
+
+  /* Social Share */
+  .share-bar {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .share-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid #2a2a3e;
+    background: #101018;
+    color: #9393b0;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .share-btn:hover { border-color: #c8a45c; color: #c8a45c; background: #151520; }
+
+  @media (max-width: 768px) {
+    .share-bar { display: none; }
+    .waitlist-form { flex-direction: column; }
+  }
+  @media (max-width: 900px) {
+    .hero h1 { font-size: 48px; }
+    .features-grid,   /* Testimonials */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+  .testimonial-card {
+    padding: 28px;
+    background: #101018;
+    border: 1px solid #1e1e2e;
+    border-radius: 12px;
+  }
+  .testimonial-stars {
+    color: #c8a45c;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+  }
+  .testimonial-text {
+    font-size: 14px;
+    color: #9393b0;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .testimonial-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(200,164,92,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #c8a45c;
+    font-weight: 600;
+  }
+  .testimonial-name { font-size: 13px; font-weight: 600; color: #e4e4ed; }
+  .testimonial-role { font-size: 11px; color: #63637d; }
+
+  /* Comparison */
+  .comparison-table-wrap {
+    overflow-x: auto;
+    margin-top: 48px;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .comparison-table th {
+    padding: 14px 18px;
+    text-align: left;
+    background: #0c0c18;
+    border-bottom: 2px solid #1e1e2e;
+    font-weight: 600;
+    color: #e4e4ed;
+    white-space: nowrap;
+  }
+  .comparison-table th:first-child { border-radius: 8px 0 0 0; }
+  .comparison-table th:last-child { border-radius: 0 8px 0 0; }
+  .comparison-table th.nova-col { color: #c8a45c; }
+  .comparison-table td {
+    padding: 12px 18px;
+    border-bottom: 1px solid #1e1e2e;
+    color: #9393b0;
+  }
+  .comparison-table td:first-child { font-weight: 500; color: #e4e4ed; }
+  .comparison-table .check { color: #5bbf7a; }
+  .comparison-table .cross { color: #63637d; }
+  .comparison-table .partial { color: #c8a45c; }
+
+  .guarantee-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    margin-top: 40px;
+    background: rgba(200,164,92,0.04);
+    border: 1px solid rgba(200,164,92,0.12);
+    border-radius: 10px;
+    font-size: 14px;
+    color: #9393b0;
+    text-align: center;
+  }
+  .guarantee-badge strong { color: #c8a45c; }
+
+  /* Waitlist */
+  .waitlist-section {
+    text-align: center;
+    padding: 80px 0;
+    background: linear-gradient(180deg, #07070c 0%, #0c0c18 50%, #07070c 100%);
+    border-top: 1px solid #1e1e2e;
+  }
+  .waitlist-box {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #101018;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+  }
+  .waitlist-box h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .waitlist-box p { color: #9393b0; font-size: 14px; margin-bottom: 20px; }
+  .waitlist-form {
+    display: flex;
+    gap: 8px;
+  }
+  .waitlist-form input {
+    flex: 1;
+    padding: 12px 16px;
+    background: #0c0c18;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    color: #e4e4ed;
+    font-size: 14px;
+    outline: none;
+  }
+  .waitlist-form input:focus { border-color: #c8a45c; }
+  .waitlist-form button {
+    padding: 12px 24px;
+    background: #c8a45c;
+    color: #07070c;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .waitlist-form button:hover { background: #dbb96a; }
+  .waitlist-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .waitlist-social {
+    margin-top: 16px;
+    color: #63637d;
+    font-size: 13px;
+  }
+  .waitlist-success { color: #5bbf7a; font-size: 14px; margin-bottom: 12px; display: none; }
+  .waitlist-error { color: #e55b5b; font-size: 13px; margin-bottom: 12px; display: none; }
+
+  /* Social Share */
+  .share-bar {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .share-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid #2a2a3e;
+    background: #101018;
+    color: #9393b0;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .share-btn:hover { border-color: #c8a45c; color: #c8a45c; background: #151520; }
+
+  @media (max-width: 768px) {
+    .share-bar { display: none; }
+    .waitlist-form { flex-direction: column; }
+  }
+  @media (max-width: 900px) {
+    .testimonials-grid { grid-template-columns: 1fr; }
+  }
+  .pricing-grid { grid-template-columns: 1fr; }
+    .ai-grid { grid-template-columns: 1fr; }
+    .faq-list { grid-template-columns: 1fr; }
+    .pricing-card.featured { transform: none; }
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 36px; }
+    .section-title { font-size: 28px; }
+    .hero { min-height: auto; }
+    .hero-content { padding: 100px 0 60px; }
+    section { padding: 60px 0; }
+  }
+</style>
+</head>
+<body>
+<!-- ====== Share Bar ====== -->
+<div class="share-bar">
+  <button class="share-btn" onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('Nova — AI Knowledge Studio. Your second brain, beautifully connected.') + '&url=' + encodeURIComponent(window.location.href), '_blank', 'width=600,height=400')" title="Share on X">&#120143;</button>
+  <button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href);this.innerHTML='✓';setTimeout(()=>this.innerHTML='&#128279;',2000)" title="Copy link">&#128279;</button>
+</div>
+
+
+<nav>
+  <div class="container">
+    <div class="nav-logo">&#9670; <span>Nova</span></div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <span id="licenseStatus" class="license-bar" style="display:none"></span>
+      <a id="tryAppBtn" href="../index.html" class="nav-cta">Try Nova Free</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">&#10026; Now with AI-powered insights</div>
+      <h1>Your second brain,<br><span class="accent">beautifully connected.</span></h1>
+      <p>Nova is a local-first knowledge studio that combines the depth of a personal wiki with the elegance of a modern writing app. Your ideas, linked, searched, and visualized — all running entirely on your machine.</p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn-primary">Buy Nova &#8594;</a>
+        <a href="../index.html" class="btn-secondary">Try Free Preview</a>
+      </div>
+      <div class="hero-showcase">
+        <div style="background:linear-gradient(135deg,#0a0a1a,#1a1a2e);border-radius:12px;padding:60px 40px;border:1px solid rgba(200,164,92,0.12);display:flex;align-items:center;justify-content:center;min-height:360px;">
+          <div style="text-align:center">
+            <div style="font-size:64px;color:#c8a45c;opacity:0.6;margin-bottom:16px;">&#9670;</div>
+            <div style="font-size:20px;font-weight:600;color:#e4e4ed;margin-bottom:8px;">Nova Knowledge Studio</div>
+            <div style="font-size:14px;color:#9393b0;">Markdown. Links. Graph. AI. All local.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything you need to think clearly.</h2>
+    <p class="section-sub">Nova is built for depth. Not just note-taking — knowledge management that grows with you.</p>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">&#9998;</div><h3>Markdown First</h3><p>Full GFM markdown with live preview. Split editor or distraction-free writing. Your data, your format.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128279;</div><h3>Bidirectional Links</h3><p>Use [[wikilinks]] to connect ideas. Nova automatically builds a web of knowledge.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128376;</div><h3>Knowledge Graph</h3><p>A real-time physics-based graph shows hidden relationships between all your notes.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#127991;</div><h3>Smart Tagging</h3><p>Tag notes with #tags. Filter, browse, and discover related ideas across your knowledge base.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128269;</div><h3>AI-Powered Search</h3><p>Intelligent full-text search with relevance ranking, recency boost, and tag-aware filtering.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128065;</div><h3>Local AI Engine</h3><p>Automatic summarization, keyword extraction, tone analysis. All running locally — zero data leaves.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="ai-section">
+  <div class="container">
+    <div class="section-label">Built-in AI</div>
+    <h2 class="section-title">Intelligence that respects your privacy.</h2>
+    <p class="section-sub">Every AI feature runs in your browser. No API calls. No data uploads. No subscriptions.</p>
+    <div class="ai-grid">
+      <div class="ai-card"><h4>Auto-Summarization</h4><p>Get concise summaries of any note with one click.</p></div>
+      <div class="ai-card"><h4>Keyword Extraction</h4><p>Identify the most important concepts in your writing.</p></div>
+      <div class="ai-card"><h4>Related Notes Discovery</h4><p>Surfaces notes with shared tags, links, and content.</p></div>
+      <div class="ai-card"><h4>Tone & Reading Level</h4><p>Understand tone and complexity of your writing.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="container">
+    <div class="section-label">Testimonials</div>
+    <h2 class="section-title">Loved by thinkers and creators.</h2>
+    <p class="section-sub">Hear from people who use Nova every day to organize their ideas.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"I've tried every knowledge management tool out there. Nova is the first one that actually makes me want to write. The graph view alone changed how I think about my notes."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div>
+            <div class="testimonial-name">Sarah Chen</div>
+            <div class="testimonial-role">Product Designer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The AI features are genuinely useful. Auto-summarization and related notes discovery help me surface ideas I forgot I had. And it all runs locally — that's huge for privacy."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">Marcus Rivera</div>
+            <div class="testimonial-role">Software Engineer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Finally, a tool that combines beautiful design with real substance. I've been using it for all my research notes and the bidirectional linking has helped me connect ideas I never would have found otherwise."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">E</div>
+          <div>
+            <div class="testimonial-name">Elena Voss</div>
+            <div class="testimonial-role">Technical Writer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="border-top:1px solid #1e1e2e" id="compare">
+  <div class="container">
+    <div class="section-label">Comparison</div>
+    <h2 class="section-title">Why Nova stands apart.</h2>
+    <p class="section-sub">Most tools compromise. Nova gives you privacy, AI, and beautiful design — all in one.</p>
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="nova-col">Nova</th>
+            <th>Obsidian</th>
+            <th>Notion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Local-first (no cloud required)</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td></tr>
+          <tr><td>Bidirectional [[links]]</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Knowledge graph visualization</td><td class="check">✓</td><td class="partial">Plugin</td><td class="cross">✗</td></tr>
+          <tr><td>Built-in AI (local, no API)</td><td class="check">✓</td><td class="partial">Plugin</td><td class="partial">Cloud AI</td></tr>
+          <tr><td>Beautiful modern UI</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td></tr>
+          <tr><td>One-time purchase, no subscription</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td></tr>
+          <tr><td>Full data ownership &amp; export</td><td class="check">✓</td><td class="check">✓</td><td class="partial">Limited</td></tr>
+          <tr><td>Dark + Light theme</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Smart tags &amp; tag cloud</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">One purchase. Own it forever.</h2>
+    <p class="section-sub">No subscriptions. No hidden fees. Your notes, your tool, your data — forever.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3>Starter</h3>
+        <div class="pricing-sub">For personal use</div>
+        <div class="price"><span class="currency">$</span>49</div>
+        <div class="price-period">one-time</div>
+        <ul class="pricing-features">
+          <li>Full Nova app</li>
+          <li>All core features</li>
+          <li>Local AI engine</li>
+          <li>Lifetime updates</li>
+          <li>Export to JSON/MD</li>
+        </ul>
+        <button class="pricing-btn" onclick="NovaCheckout.openCheckout({name:'Starter',price:49,desc:'Personal lifetime license'})">Buy Now</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Best Value</div>
+        <h3>Professional</h3>
+        <div class="pricing-sub">For power users &amp; creators</div>
+        <div class="price"><span class="currency">$</span>99</div>
+        <div class="price-period">one-time</div>
+        <ul class="pricing-features">
+          <li>Everything in Starter</li>
+          <li>Priority support</li>
+          <li>Custom themes</li>
+          <li>Advanced export</li>
+          <li>Early access features</li>
+        </ul>
+        <button class="pricing-btn primary" onclick="NovaCheckout.openCheckout({name:'Professional',price:99,desc:'Power user lifetime license'})">Buy Now</button>
+      </div>
+      <div class="pricing-card">
+        <h3>Enterprise</h3>
+        <div class="pricing-sub">For teams &amp; organizations</div>
+        <div class="price"><span class="currency">$</span>1,000</div>
+        <div class="price-period">one-time, up to 10 seats</div>
+        <ul class="pricing-features">
+          <li>Everything in Professional</li>
+          <li>Team collaboration</li>
+          <li>Shared knowledge bases</li>
+          <li>White-label option</li>
+          <li>Custom integrations</li>
+          <li>Dedicated support</li>
+        </ul>
+        <button class="pricing-btn" onclick="NovaCheckout.openCheckout({name:'Enterprise',price:1000,desc:'Team license up to 10 seats'})">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Frequently asked questions.</h2>
+    <div class="faq-list">
+      <div class="faq-item"><h4>Is my data stored locally?</h4><p>Yes. Nova runs entirely in your browser using IndexedDB. Your notes never leave your machine.</p></div>
+      <div class="faq-item"><h4>Do I need an internet connection?</h4><p>Only for the initial load. After that, Nova works fully offline.</p></div>
+      <div class="faq-item"><h4>Can I import from Obsidian/Notion?</h4><p>Nova supports JSON import. Converter tools coming soon for Pro and Enterprise.</p></div>
+      <div class="faq-item"><h4>What AI features are included?</h4><p>Summarization, keyword extraction, tone analysis, reading level, and related notes — all in-browser.</p></div>
+      <div class="faq-item"><h4>How do I get my license after purchase?</h4><p>Your license key is shown immediately after purchase and emailed to you. You can also re-download anytime.</p></div>
+      <div class="faq-item"><h4>Can I try before buying?</h4><p>Yes! Try the full app free at any time via the Try Nova Free button. Purchase only when you're ready.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container"><p>&#9670; Nova Knowledge Studio — Built with care. Made in 2026.</p></div>
+</footer>
+
+<!-- ====== Checkout Modal ====== -->
+<div id="checkoutOverlay" class="checkout-overlay hidden">
+  <div class="checkout-modal">
+    <div class="checkout-header">
+      <div>
+        <h2>Complete Your Purchase</h2>
+        <div class="plan-tag" id="checkoutPlanDesc"></div>
+      </div>
+      <button class="checkout-close" onclick="NovaCheckout.closeCheckout()">&#10005;</button>
+    </div>
+    <div class="checkout-body">
+      <div class="checkout-summary">
+        <span class="plan-name" id="checkoutPlanName"></span>
+        <span class="plan-price" id="checkoutPlanPrice"></span>
+      </div>
+
+      <div id="checkoutForm">
+        <div class="form-group"><label>Full Name</label><input type="text" id="checkoutName" placeholder="John Doe" autocomplete="name"></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="checkoutEmail" placeholder="john@example.com" autocomplete="email"></div>
+        <div id="checkoutError" class="checkout-error hidden"></div>
+        <button class="checkout-btn" id="checkoutBtn" onclick="NovaCheckout.processPurchase()">Complete Purchase</button>
+        <div class="checkout-secure"><span>&#128274;</span> Secure checkout powered by Stripe</div>
+      </div>
+
+      <div id="checkoutSuccess" class="checkout-success hidden">
+        <div class="success-check">&#10004;</div>
+        <h3>Purchase Successful!</h3>
+        <p id="successName"></p>
+        <div class="license-display" id="successLicense"></div>
+        <p style="font-size:14px;color:#9393b0">Your download will start automatically.</p>
+        <p style="font-size:14px;color:#9393b0;margin-top:4px" id="successPlan"></p>
+        <p class="success-email-notice">A confirmation email has been sent to <span id="successEmail"></span></p>
+        <button class="checkout-btn" style="margin-top:16px" onclick="NovaCheckout.closeCheckout()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/checkout.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof NovaCheckout !== 'undefined') NovaCheckout.init();
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

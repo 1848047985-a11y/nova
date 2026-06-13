@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova — Your Downloads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #07070c;
+    color: #e4e4ed;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container { max-width: 560px; width: 100%; padding: 40px 24px; }
+  .card {
+    background: #101018;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+    padding: 40px;
+    text-align: center;
+  }
+  .icon { font-size: 48px; margin-bottom: 16px; }
+  h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  p { color: #9393b0; font-size: 15px; margin-bottom: 24px; line-height: 1.7; }
+  .license-info {
+    background: #0c0c18;
+    border: 1px solid #1e1e2e;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  .license-info .label { font-size: 12px; color: #63637d; font-weight: 500; }
+  .license-info .value { font-size: 14px; color: #e4e4ed; margin-bottom: 8px; }
+  .license-info .value:last-child { margin-bottom: 0; }
+  .license-info .key {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #c8a45c;
+    word-break: break-all;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 32px;
+    background: #c8a45c;
+    color: #07070c;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: #dbb96a; transform: translateY(-2px); }
+  .btn-secondary {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 24px;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    color: #e4e4ed;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: #c8a45c; }
+  .no-license {
+    text-align: center;
+    padding: 20px;
+    color: #63637d;
+  }
+  .no-license a { color: #c8a45c; }
+  .app-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 24px;
+    background: rgba(200,164,92,0.1);
+    border: 1px solid rgba(200,164,92,0.3);
+    border-radius: 8px;
+    color: #c8a45c;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .app-btn:hover { background: rgba(200,164,92,0.2); }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" id="downloadView">
+      <div class="icon">&#9670;</div>
+      <h1>Your Downloads</h1>
+      <p>Access your purchased Nova app and license information.</p>
+      <div id="licenseDetails"></div>
+      <a href="../../dist/nova-app-v1.0.zip" class="btn" download>Download Nova v1.0</a>
+      <br>
+      <a href="../index.html" class="app-btn">Open Nova App</a>
+      <br>
+      <a href="index.html" class="btn-secondary">Back to Home</a>
+    </div>
+  </div>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const details = document.getElementById('licenseDetails');
+    const activeKey = localStorage.getItem('nova-active-license');
+    const db = JSON.parse(localStorage.getItem('nova-licenses') || '{}');
+
+    if (activeKey && db[activeKey]) {
+      const lic = db[activeKey];
+      details.innerHTML =
+        '<div class="license-info">' +
+          '<div class="label">License Key</div><div class="value key">' + lic.key + '</div>' +
+          '<div class="label">Plan</div><div class="value">' + lic.plan + ' &mdash; $' + lic.price + '</div>' +
+          '<div class="label">Registered To</div><div class="value">' + lic.name + ' (' + lic.email + ')</div>' +
+          '<div class="label">Purchase Date</div><div class="value">' + new Date(lic.date).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}) + '</div>' +
+        '</div>';
+    } else {
+      details.innerHTML = '<div class="no-license"><p>No license found. Please <a href="index.html">purchase Nova</a> to get your download.</p></div>';
+    }
+  });
+  </script>
+</body>
+</html>
