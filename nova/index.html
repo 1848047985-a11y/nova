@@ -111,12 +111,8 @@
 document.addEventListener("DOMContentLoaded", function() {
   var key = localStorage.getItem("nova-active-license");
   var db = JSON.parse(localStorage.getItem("nova-licenses") || "{}");
-    var el = document.getElementById("appLicenseStatus");
-  if (el) {
-    if (key && db[key]) {
-      el.innerHTML = "Licensed - " + db[key].plan + " <a href=\"landing/download.html\" style=\"color:var(--accent);font-size:11px\">Downloads</a>";
-      el.style.color = "var(--success)";
-    } else {
+    
+ else {
       el.innerHTML = "<a href=\"landing/index.html#pricing\" style=\"color:var(--accent);font-size:11px\">Unlock Full Version</a>";
     }
   } else {
