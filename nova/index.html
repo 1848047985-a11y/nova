@@ -120,6 +120,17 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 </script>
+<script>
+window.onerror = function(msg, url, line, col, error) {
+  var el = document.createElement("div");
+  el.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#c0392b;color:white;padding:16px;font-size:13px;z-index:99999;font-family:monospace;max-height:200px;overflow:auto";
+  el.innerHTML = "<strong>Error:</strong> " + msg + "<br><small>" + url + ":" + line + ":" + col + "</small>";
+  if (error && error.stack) {
+    el.innerHTML += "<br><br><strong>Stack:</strong><br>" + error.stack.replace(/\n/g, "<br>");
+  }
+  document.body.appendChild(el);
+};
+</script>
 </body>
 </html>
 
