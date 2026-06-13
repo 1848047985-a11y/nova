@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
@@ -120,36 +120,39 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 </script>
+
 <script>
 window.onerror = function(msg, url, line, col, error) {
-  var el = document.getElementById("nova-error-display");
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "nova-error-display";
-    el.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#c0392b;color:white;padding:20px;font-size:14px;z-index:99999;font-family:monospace;max-height:300px;overflow:auto;border-top:3px solid #e74c3c";
-    document.body.appendChild(el);
-  }
-  el.innerHTML += "<div style='margin-bottom:8px'><strong>[JS Error]</strong> " + msg + "<br><small>" + (url||"") + ":" + (line||"") + ":" + (col||"") + "</small></div>";
-  if (error && error.stack) {
-    el.innerHTML += "<pre style='font-size:11px;margin:4px 0 8px;opacity:0.8'>" + error.stack.replace(/\n/g, "<br>") + "</pre>";
-  }
+  var el = document.getElementById('dbg');
+  if (!el) { el = document.createElement('div'); el.id = 'dbg'; el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:white;padding:16px;z-index:99999;font-size:13px'; document.body.appendChild(el); }
+  el.innerHTML = 'JS ERROR: ' + msg;
+  console.error(msg, url, line, col, error);
 };
 
-window.onunhandledrejection = function(event) {
-  var reason = event.reason;
-  var el = document.getElementById("nova-error-display");
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "nova-error-display";
-    el.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#2980b9;color:white;padding:20px;font-size:14px;z-index:99999;font-family:monospace;max-height:300px;overflow:auto;border-top:3px solid #3498db";
-    document.body.appendChild(el);
+// Direct button handler - works immediately, no dependencies
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('emptyNewNoteBtn');
+  if (btn) {
+    console.log('Button handler attached');
+    btn.onclick = function() {
+      var n = prompt('Note title:', '');
+      if (n !== null) {
+        try {
+          if (window.NovaApp && NovaApp.init) {
+            NovaApp.createNote();
+          } else {
+            alert('App still loading...');
+          }
+        } catch(e) {
+          document.getElementById('dbg').innerHTML = 'CLICK ERROR: ' + e.message;
+        }
+      }
+    };
   }
-  el.innerHTML += "<div style='margin-bottom:8px'><strong>[Promise Error]</strong> " + (reason?.message || reason || "Unknown") + "</div>";
-  if (reason?.stack) {
-    el.innerHTML += "<pre style='font-size:11px;margin:4px 0 8px;opacity:0.8'>" + reason.stack.replace(/\n/g, "<br>") + "</pre>";
-  }
-};
+  console.log('DOM ready, NovaApp:', typeof NovaApp);
+});
 </script>
+
 </body>
 </html>
 
